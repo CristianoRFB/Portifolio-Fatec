@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "github:fetch": "node scripts/fetch-github-descriptions.js",
+    "github:update": "node scripts/update-projects-from-github.js",
+    "github:sync": "npm run github:fetch && npm run github:update"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -18,7 +21,11 @@
     "next": "16.0.3",
     "next-themes": "^0.4.6",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "react-markdown": "^10.1.0",
+    "rehype-raw": "^7.0.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

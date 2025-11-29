@@ -1,0 +1,51 @@
+{
+  "Portifolio-Fatec": {
+    "name": "Portifolio-Fatec",
+    "description": "Portifólio da Fatec",
+    "url": "https://github.com/CristianoRFB/Portifolio-Fatec",
+    "language": "TypeScript",
+    "topics": []
+  },
+  "Fatec-Banco-de-dados": {
+    "name": "Fatec-Banco-de-dados",
+    "description": "",
+    "url": "https://github.com/CristianoRFB/Fatec-Banco-de-dados",
+    "language": null,
+    "topics": []
+  },
+  "Estrutura-de-Dados": {
+    "name": "Estrutura-de-Dados",
+    "description": "",
+    "url": "https://github.com/CristianoRFB/Estrutura-de-Dados",
+    "language": null,
+    "topics": []
+  },
+  "ProdutoFornecedorDOTNET": {
+    "name": "ProdutoFornecedorDOTNET",
+    "description": "Um CRUD em visão do funcionário funcionando em servidor SQL",
+    "url": "https://github.com/CristianoRFB/ProdutoFornecedorDOTNET",
+    "language": "C#",
+    "topics": []
+  },
+  "Sistema-de-gerenciamento-de-cursos": {
+    "name": "Sistema-de-gerenciamento-de-cursos",
+    "description": "",
+    "url": "https://github.com/CristianoRFB/Sistema-de-gerenciamento-de-cursos",
+    "language": null,
+    "topics": []
+  },
+  "S7-Animes": {
+    "name": "S7-Animes",
+    "description": "S7 Animes é uma aplicação mobile (futuro website) unificada que integra animes e mangás em um único ambiente. Disponível como app e site, oferece organização precisa, navegação intuitiva e conteúdo sempre atualizado, permitindo ao usuário acompanhar obras, episódios e capítulos de forma completa, centralizada.",
+    "url": "https://github.com/CristianoRFB/S7-Animes",
+    "language": null,
+    "topics": []
+  },
+  "Me-App": {
+    "name": "Me-App",
+    "description": "MeApp é um app que reúne tudo sobre você em um só lugar. Organize sua vida pessoal e profissional, acompanhe metas, registre momentos, crie um portfólio completo e visualize sua evolução. Simples, intuitivo e seguro, o MeApp oferece uma visão 360° da sua identidade em um ambiente moderno e personalizável.",
+    "url": "https://github.com/CristianoRFB/Me-App",
+    "language": null,
+    "topics": []
+  }
+}

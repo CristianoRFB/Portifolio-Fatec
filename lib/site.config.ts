@@ -2,8 +2,8 @@ import { SiteConfig } from './types';
 
 export const siteConfig: SiteConfig = {
   author: 'Cristiano Ronaldo Ferreira Bueno',
-  title: 'Cristiano Ronaldo',
-  description: 'Portfolio de Cristiano Ronaldo Ferreira Bueno, Full-Stack Developer com expertise em .NET, Java, React, Angular e mais. Especialista em arquiteturas modernas como DDD, Clean Architecture e Microserviços.',
+  title: 'Cristiano.dev',
+  description: 'Portfolio de Cristiano Ronaldo Ferreira Bueno, Full-Stack Developer com expertise em .NET, Java, React e mais. Especialista em arquiteturas modernas como DDD, Clean Architecture e Microserviços.',
   email: 'cristiano.bueno01@fatec.sp.gov.br',
   phone: '+55 17 996543360',
   whatsapp: '5517996543360',

@@ -80,6 +80,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
             >
               {project.title}
             </Typography>
+              {/* Special notice for the portfolio repository */}
+              {project.slug === 'portifolio-fatec' && (
+                <Box sx={{ mt: 1 }}>
+                  <Chip
+                    label="Esse é o repositório desse projeto!"
+                    color="secondary"
+                    size="small"
+                    sx={{ fontWeight: 700 }}
+                  />
+                </Box>
+              )}
           </Box>
 
           <Box sx={{ display: 'flex', gap: 1 }}>

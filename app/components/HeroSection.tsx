@@ -32,43 +32,17 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              style={{ display: 'inline-block', marginBottom: 32 }}
-            >
-              <Chip
-                label="👋 Seja bem-vindo ao meu portfólio"
-                sx={{
-                  px: 2,
-                  py: 3,
-                  fontSize: { xs: '0.875rem', md: '1rem' },
-                  fontWeight: 600,
-                  backgroundColor: 'primary.main',
-                  color: 'white',
-                  backdropFilter: 'blur(10px)',
-                  boxShadow: 2,
-                  '&:hover': {
-                    backgroundColor: 'primary.dark',
-                    transform: 'scale(1.05)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-              />
-            </motion.div>
-
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '3rem', md: '4.5rem', lg: '6rem' },
+                fontSize: { xs: '2rem', md: '3rem', lg: '4rem' },
                 fontWeight: 800,
                 color: 'text.primary',
                 mb: 4,
                 lineHeight: 1.1,
               }}
             >
-              Oi — me chamo <br />
+              Olá, me chamo <br />
                 <Box
                   component="span"
                   sx={{
@@ -97,7 +71,7 @@ export function HeroSection() {
                 mb: 3,
               }}
             >
-              Desenvolvedor Full-Stack
+              Futuro Desenvolvedor Full-Stack
             </Typography>
           </motion.div>
 
@@ -118,30 +92,7 @@ export function HeroSection() {
                 lineHeight: 1.8,
               }}
             >
-              Atuo com{' '}
-              <Box component="span" sx={{ color: 'primary.main', fontWeight: 700 }}>
-                .NET
-              </Box>
-              ,{' '}
-              <Box component="span" sx={{ color: 'primary.main', fontWeight: 700 }}>
-                Java
-              </Box>
-              ,{' '}
-              <Box component="span" sx={{ color: 'primary.main', fontWeight: 700 }}>
-                React
-              </Box>{' '}
-              e plataformas/arquiteturas modernas como{' '}
-              <Box component="span" sx={{ color: 'primary.main', fontWeight: 700 }}>
-                DDD
-              </Box>
-              ,{' '}
-              <Box component="span" sx={{ color: 'primary.main', fontWeight: 700 }}>
-                Clean Architecture
-              </Box>{' '}
-              e{' '}
-              <Box component="span" sx={{ color: 'primary.main', fontWeight: 700 }}>
-                Microserviços
-              </Box>
+              Atual estudante futuro profissional
             </Typography>
           </motion.div>
 
@@ -160,7 +111,7 @@ export function HeroSection() {
                 mx: 'auto',
               }}
             >
-              📚 Cursando Análise e Desenvolvimento de Sistemas na Fatec Jales
+              Cursando Análise e Desenvolvimento de Sistemas - AMS na Fatec Jales
             </Typography>
           </motion.div>
 
@@ -175,7 +126,7 @@ export function HeroSection() {
                 flexWrap: 'wrap',
                 gap: 2,
                 justifyContent: 'center',
-                mb: 12,
+                alignItems: 'center',
               }}
             >
               <Button

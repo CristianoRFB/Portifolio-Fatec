@@ -1,8 +1,8 @@
-'use client';
-
-import { notFound, useParams } from 'next/navigation';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
+// Note: we avoid importing `Link` here because passing function components
+// down into client components (MotionDiv) can cause serialization errors.
+import { notFound } from 'next/navigation';
+import { MotionDiv } from '@/app/components/ClientMotion';
+import { ReadmeViewer } from '@/app/components/ReadmeViewer';
 import {
   Box,
   Container,
@@ -18,13 +18,56 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { getProjectBySlug, projects } from '@/lib/projects';
 
-export default function ProjectPage() {
-  const params = useParams();
-  const slug = params.slug as string;
+export default async function ProjectPage({ params }: { params?: any }) {
+  // Next 16 may provide `params` as a Promise in some render paths — unwrap safely
+  const resolvedParams = params ? await params : null;
+  const slug = resolvedParams?.slug ? String(resolvedParams.slug) : null;
+  if (!slug) {
+    // Log minimal info to server console for debugging and return a proper 404
+    // (avoids TypeError when params is a Promise or undefined)
+    // eslint-disable-next-line no-console
+    console.warn('ProjectPage: missing params.slug', { params: !!params, resolvedParams });
+    notFound();
+  }
   const project = getProjectBySlug(slug);
 
   if (!project) {
     notFound();
+  }
+
+  // Try to fetch README and repo metadata from GitHub (server-side)
+  let readmeRaw: string | null = null;
+  let repoLanguage: string | null = null;
+  let repoTopics: string[] = [];
+
+  try {
+    const githubUrl = new URL(project.github);
+    const [, owner, repo] = githubUrl.pathname.split('/');
+
+    if (owner && repo) {
+      // fetch README (raw)
+      const readmeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+        headers: { Accept: 'application/vnd.github.v3.raw' },
+        next: { revalidate: 60 * 60 },
+      });
+      if (readmeRes.ok) {
+        readmeRaw = await readmeRes.text();
+      }
+
+      // fetch repo metadata
+      const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+        headers: { Accept: 'application/vnd.github.v3+json' },
+        next: { revalidate: 60 * 60 },
+      });
+      if (repoRes.ok) {
+        const repoJson = await repoRes.json();
+        repoLanguage = repoJson.language || null;
+        repoTopics = repoJson.topics || [];
+      }
+    }
+  } catch (e) {
+    // ignore network errors and fall back to project data
+    console.warn('Failed to fetch GitHub data for', project.github, e);
   }
 
   const highlights: Record<string, { icon: string; title: string; description: string }[]> = {
@@ -63,13 +106,13 @@ export default function ProjectPage() {
     >
       <Container maxWidth="lg">
         {/* Back Button */}
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
         >
           <Button
-            component={Link}
+            component="a"
             href="/#projects"
             startIcon={<ArrowBackIcon />}
             sx={{
@@ -83,10 +126,10 @@ export default function ProjectPage() {
           >
             Voltar para projetos
           </Button>
-        </motion.div>
+        </MotionDiv>
 
         {/* Project Header */}
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -114,6 +157,20 @@ export default function ProjectPage() {
             >
               {project.description}
             </Typography>
+
+            {/* Repo metadata pulled from GitHub when available */}
+            {repoLanguage && (
+              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+                Linguagem principal: <strong>{repoLanguage}</strong>
+              </Typography>
+            )}
+            {repoTopics.length > 0 && (
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2 }}>
+                {repoTopics.map((t) => (
+                  <Chip key={t} label={t} size="small" />
+                ))}
+              </Box>
+            )}
 
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
               <Button
@@ -160,10 +217,10 @@ export default function ProjectPage() {
               )}
             </Box>
           </Box>
-        </motion.div>
+        </MotionDiv>
 
         {/* Technologies */}
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -200,10 +257,10 @@ export default function ProjectPage() {
               ))}
             </Box>
           </Box>
-        </motion.div>
+        </MotionDiv>
 
         {/* Description */}
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -237,13 +294,16 @@ export default function ProjectPage() {
               >
                 {project.longDescription}
               </Typography>
+
+              {/* Show README content fetched from GitHub with GitHub-like styling */}
+              {readmeRaw && <ReadmeViewer content={readmeRaw} />}
             </CardContent>
           </Card>
-        </motion.div>
+        </MotionDiv>
 
         {/* Highlights */}
         {projectHighlights.length > 0 && (
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -262,7 +322,7 @@ export default function ProjectPage() {
               <Grid container spacing={3}>
                 {projectHighlights.map((highlight, index) => (
                   <Grid size={{ xs: 12, md: 4 }} key={index}>
-                    <motion.div
+                    <MotionDiv
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
@@ -304,16 +364,16 @@ export default function ProjectPage() {
                           </Typography>
                         </CardContent>
                       </Card>
-                    </motion.div>
+                    </MotionDiv>
                   </Grid>
                 ))}
               </Grid>
             </Box>
-          </motion.div>
+          </MotionDiv>
         )}
 
         {/* Call to Action */}
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
@@ -369,7 +429,7 @@ export default function ProjectPage() {
                   Acessar Repositório
                 </Button>
                 <Button
-                  component={Link}
+                  component="a"
                   href="/#contact"
                   variant="outlined"
                   sx={{
@@ -389,7 +449,7 @@ export default function ProjectPage() {
               </Box>
             </CardContent>
           </Card>
-        </motion.div>
+        </MotionDiv>
       </Container>
     </Box>
   );

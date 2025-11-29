@@ -20,8 +20,8 @@ export function ProjectsSection() {
     >
       <Container maxWidth="lg">
         <SectionTitle
-          title="Projetos em Destaque"
-          subtitle="Seleção dos meus melhores trabalhos e projetos desenvolvidos"
+          title="Projetos pela Fatec"
+          subtitle="Seleção dos meus melhores trabalhos e projetos desenvolvidos pela Fatec"
         />
 
         <Box

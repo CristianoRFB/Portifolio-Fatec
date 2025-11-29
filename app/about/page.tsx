@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Box, Container, Typography, Card, CardContent, Grid } from '@mui/material';
+import { Box, Container, Typography, Card, CardContent } from '@mui/material';
 import WorkIcon from '@mui/icons-material/Work';
 import SchoolIcon from '@mui/icons-material/School';
 import CodeIcon from '@mui/icons-material/Code';
@@ -16,9 +16,7 @@ export default function AboutPage() {
     { tech: 'HTML, CSS, JavaScript', years: '4 anos', description: 'Desenvolvimento web completo' },
     { tech: 'Estrutura de Dados & Algoritmos', years: '4 anos', description: 'Base sólida em CS' },
     { tech: 'React', years: '2 anos', description: 'Aplicações web modernas' },
-    { tech: 'Angular', years: '1 ano', description: 'Framework enterprise' },
     { tech: 'Java', years: '1 ano', description: 'Backend com Spring Boot' },
-    { tech: 'PHP', years: '2 anos', description: 'Desenvolvimento web tradicional' },
     { tech: 'Azure DevOps', years: 'Desde 2024', description: 'DevOps' },
     { tech: 'Git & GitHub', years: 'Desde 2024', description: 'O essencial versionamento de código' },
   ];
@@ -126,14 +124,18 @@ export default function AboutPage() {
           </Box>
         </motion.div>
 
-        {/* Experience Timeline */}
+        {/* Tech Timeline */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           <Box sx={{ mb: 10 }}>
-            <SectionTitle title="Minha Experiência Profissional" align="left" />
+            <SectionTitle
+              title="Experiência com Tecnologias"
+              subtitle="Timeline detalhada do meu desenvolvimento técnico"
+              align="left"
+            />
             
             <Box sx={{ position: 'relative', pl: { xs: 3, md: 4 } }}>
               {/* Timeline line */}
@@ -312,7 +314,11 @@ export default function AboutPage() {
                               justifyContent: 'center',
                             }}
                           >
-                            <SchoolIcon sx={{ fontSize: '1.5rem' }} />
+                            {edu.type === 'freelance' ? (
+                              <CodeIcon sx={{ fontSize: '1.5rem' }} />
+                            ) : (
+                              <SchoolIcon sx={{ fontSize: '1.5rem' }} />
+                            )}
                           </Box>
                           <Box sx={{ flex: 1 }}>
                             <Typography
@@ -348,75 +354,116 @@ export default function AboutPage() {
           </Box>
         </motion.div>
 
-        {/* Tech Timeline */}
+        {/* Experience Timeline */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <Box sx={{ mb: 10 }}>
-            <SectionTitle
-              title="Experiência com Tecnologias"
-              subtitle="Timeline detalhada do meu desenvolvimento técnico"
-              align="left"
-            />
+            <SectionTitle title="Minha Experiência Profissional" align="left" />
             
-            <Grid container spacing={3}>
-              {techTimeline.map((item, index) => (
-                <Grid size={{ xs: 12, sm: 6 }} key={index}>
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    viewport={{ once: true }}
-                  >
-                    <Card
-                      elevation={1}
+            <Box sx={{ position: 'relative', pl: { xs: 3, md: 4 } }}>
+              {/* Timeline line */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  left: { xs: 11, md: 15 },
+                  top: 0,
+                  bottom: 0,
+                  width: 2,
+                  backgroundColor: 'primary.main',
+                  opacity: 0.3,
+                }}
+              />
+              
+              {workExperiences.map((exp, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Box sx={{ position: 'relative', mb: 4 }}>
+                    {/* Timeline dot */}
+                    <Box
                       sx={{
-                        height: '100%',
+                        position: 'absolute',
+                        left: { xs: -3, md: -4 },
+                        top: 0,
+                        width: 24,
+                        height: 24,
+                        borderRadius: '50%',
+                        backgroundColor: 'primary.main',
+                        border: '4px solid',
+                        borderColor: 'background.paper',
+                        zIndex: 1,
+                      }}
+                    />
+                    
+                    <Card
+                      elevation={2}
+                      sx={{
+                        ml: { xs: 4, md: 5 },
                         borderRadius: 3,
                         transition: 'all 0.3s ease',
                         '&:hover': {
-                          boxShadow: 6,
+                          boxShadow: 8,
                           transform: 'translateY(-4px)',
-                          borderColor: 'primary.main',
                         },
                       }}
                     >
-                      <CardContent sx={{ p: 3 }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5 }}>
-                          <Typography
-                            variant="h6"
-                            sx={{ fontWeight: 700, color: 'text.primary', fontSize: '1rem' }}
-                          >
-                            {item.tech}
-                          </Typography>
+                      <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, mb: 2 }}>
                           <Box
                             sx={{
-                              px: 2,
-                              py: 0.5,
-                              borderRadius: 99,
+                              p: 1.5,
+                              borderRadius: 2,
                               backgroundColor: 'primary.main',
                               color: 'white',
-                              fontSize: '0.75rem',
-                              fontWeight: 600,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
                             }}
                           >
-                            {item.years}
+                            {exp.type === 'freelance' ? (
+                              <CodeIcon sx={{ fontSize: '1.5rem' }} />
+                            ) : (
+                              <WorkIcon sx={{ fontSize: '1.5rem' }} />
+                            )}
+                          </Box>
+                          <Box sx={{ flex: 1 }}>
+                            <Typography
+                              variant="h6"
+                              sx={{ fontWeight: 700, color: 'text.primary', mb: 0.5 }}
+                            >
+                              {exp.title}
+                            </Typography>
+                            <Typography
+                              variant="subtitle1"
+                              sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}
+                            >
+                              {exp.company}
+                            </Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
+                              <CalendarTodayIcon sx={{ fontSize: '1rem' }} />
+                              <Typography variant="body2">{exp.period}</Typography>
+                            </Box>
                           </Box>
                         </Box>
                         <Typography
-                          variant="body2"
-                          sx={{ color: 'text.secondary' }}
+                          variant="body1"
+                          sx={{ color: 'text.secondary', lineHeight: 1.7 }}
                         >
-                          {item.description}
+                          {exp.description}
                         </Typography>
                       </CardContent>
                     </Card>
-                  </motion.div>
-                </Grid>
+                  </Box>
+                </motion.div>
               ))}
-            </Grid>
+            </Box>
           </Box>
         </motion.div>
 
@@ -426,9 +473,9 @@ export default function AboutPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <Grid container spacing={3} justifyContent="center">
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 3, maxWidth: '1000px', mx: 'auto', mb: 4 }}>
             {stats.map((stat, index) => (
-              <Grid item xs={6} md={3} key={index}>
+              <Box key={index}>
                 <Card
                   elevation={2}
                   sx={{
@@ -459,17 +506,15 @@ export default function AboutPage() {
                     {stat.label}
                   </Typography>
                 </Card>
-              </Grid>
-            ))}
-            {/* Counter below the stats, centered with same indentation */}
-            <Grid item xs={12}>
-              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-                <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
-                  {daysLeft} Dias até a conclusão da Fatec.
-                </Typography>
               </Box>
-            </Grid>
-          </Grid>
+            ))}
+          </Box>
+          {/* Counter below the stats, centered with same indentation */}
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
+              {daysLeft} Dias até a conclusão da Fatec.
+            </Typography>
+          </Box>
         </motion.div>
       </Container>
     </Box>

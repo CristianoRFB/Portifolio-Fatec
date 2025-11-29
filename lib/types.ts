@@ -8,11 +8,12 @@ export interface Project {
   github: string;
   demo?: string;
   featured: boolean;
+  personal?: boolean;
 }
 
 export interface Skill {
   name: string;
-  category: 'primary' | 'frontend' | 'backend' | 'architecture' | 'secondary';
+  category: 'primary' | 'frontend' | 'backend';
   years?: string;
 }
 

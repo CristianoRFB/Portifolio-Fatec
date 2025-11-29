@@ -8,8 +8,6 @@ import { Box, Container, Card, CardContent, Typography } from '@mui/material';
 import CodeIcon from '@mui/icons-material/Code';
 import WebIcon from '@mui/icons-material/Web';
 import CloudIcon from '@mui/icons-material/Cloud';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import ExtensionIcon from '@mui/icons-material/Extension';
 
 export function SkillsSection() {
   const categories = [
@@ -33,20 +31,6 @@ export function SkillsSection() {
       icon: <CloudIcon sx={{ fontSize: '1.75rem' }} />,
       color: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
       category: 'backend',
-    },
-    {
-      title: 'Arquiteturas',
-      skills: skillsByCategory.architecture,
-      icon: <AccountTreeIcon sx={{ fontSize: '1.75rem' }} />,
-      color: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
-      category: 'architecture',
-    },
-    {
-      title: 'Tecnologias Secundárias',
-      skills: skillsByCategory.secondary,
-      icon: <ExtensionIcon sx={{ fontSize: '1.75rem' }} />,
-      color: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
-      category: 'secondary',
     },
   ];
 

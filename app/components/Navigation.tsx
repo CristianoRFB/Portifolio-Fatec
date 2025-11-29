@@ -35,7 +35,7 @@ export function Navigation() {
 
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: '/#projects', label: 'Projetos' },
+    { href: '/#projects', label: 'Projetos pela Fatec' },
     { href: '/#personal-projects', label: 'Projetos Pessoais' },
     { href: '/about', label: 'Sobre' },
     { href: '/#contact', label: 'Contato' },
@@ -55,6 +55,7 @@ export function Navigation() {
       <AppBar
         position="fixed"
         elevation={0}
+        suppressHydrationWarning
         sx={{
           backgroundColor: 'background.paper',
           backdropFilter: 'blur(8px)',
@@ -91,9 +92,11 @@ export function Navigation() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'white',
+                    fontSize: '1.5rem',
+                    fontWeight: 800,
                   }}
                 >
-                  <CodeIcon sx={{ fontSize: '1.25rem' }} />
+                  7
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.25 }}>
                   <Box
@@ -105,17 +108,7 @@ export function Navigation() {
                       letterSpacing: '-0.01em',
                     }}
                   >
-                    Cristiano Ronaldo Ferreira Bueno
-                  </Box>
-                  <Box
-                    component="span"
-                    sx={{
-                      fontSize: '1.25rem',
-                      fontWeight: 400,
-                      color: 'text.secondary',
-                    }}
-                  >
-                    .dev
+                    Cristiano.dev
                   </Box>
                 </Box>
               </Box>

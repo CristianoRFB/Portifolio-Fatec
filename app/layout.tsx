@@ -20,6 +20,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: siteConfig.title,
   description: siteConfig.description,
+  icons: {
+    icon: '/favicon.svg',
+  },
   keywords: [
   "Cristiano Ronaldo Ferreira Bueno",
     "Full-Stack Developer",
