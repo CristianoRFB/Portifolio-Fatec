@@ -1,5 +1,6 @@
-'use client';
+ 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Box, Container, Typography, Card, CardContent, Grid } from '@mui/material';
 import WorkIcon from '@mui/icons-material/Work';
@@ -18,17 +19,33 @@ export default function AboutPage() {
     { tech: 'Angular', years: '1 ano', description: 'Framework enterprise' },
     { tech: 'Java', years: '1 ano', description: 'Backend com Spring Boot' },
     { tech: 'PHP', years: '2 anos', description: 'Desenvolvimento web tradicional' },
-    { tech: 'Ruby & Go', years: '~3 meses cada', description: 'Linguagens modernas' },
-    { tech: 'Docker, AWS, Azure DevOps', years: '1 ano', description: 'DevOps e cloud' },
-    { tech: 'Git & GitHub', years: 'Desde 2019', description: 'Versionamento de código' },
+    { tech: 'Azure DevOps', years: 'Desde 2024', description: 'DevOps' },
+    { tech: 'Git & GitHub', years: 'Desde 2024', description: 'O essencial versionamento de código' },
   ];
 
   const stats = [
-    { value: '4', label: 'Anos de Experiência' },
     { value: '10+', label: 'Tecnologias Dominadas' },
-    { value: '4', label: 'Arquiteturas' },
+    { value: '4', label: 'Anos de bagagem' },
     { value: '2026', label: 'Conclusão Fatec' },
   ];
+
+  // Conta os dias restantes até 17 de dezembro de 2026
+  const calculateDaysLeft = () => {
+    const target = new Date(2026, 11, 17, 0, 0, 0, 0); // mês 11 = dezembro
+    const now = new Date();
+    const diff = target.getTime() - now.getTime();
+    const days = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+    return days;
+  };
+
+  const [daysLeft, setDaysLeft] = useState<number>(calculateDaysLeft());
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setDaysLeft(calculateDaysLeft());
+    }, 1000 * 60 * 60); // atualiza a cada hora
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <Box
@@ -57,7 +74,7 @@ export default function AboutPage() {
                 letterSpacing: '-0.02em',
               }}
             >
-              Quem Sou
+              Quem eu sou?
             </Typography>
             
             <Box sx={{ maxWidth: '800px' }}>
@@ -70,11 +87,11 @@ export default function AboutPage() {
                   fontSize: { xs: '1.125rem', md: '1.25rem' },
                 }}
               >
-                Olá! Meu nome é{' '}
+                Meu nome é{' '}
                 <Box component="span" sx={{ color: 'primary.main', fontWeight: 700 }}>
                   Cristiano Ronaldo Ferreira Bueno
                 </Box>
-                , sou um desenvolvedor Full-Stack dedicado a projetar e implementar soluções digitais que resolvem problemas reais.
+                , sou um futuro desenvolvedor Full-Stack, ando dedicado a projetar e implementar soluções digitais que resolvem problemas que enfrento de forma cotidiana e outros problemas que considero importantes.
               </Typography>
               
               <Typography
@@ -90,7 +107,7 @@ export default function AboutPage() {
                 <Box component="span" sx={{ color: 'primary.main', fontWeight: 600 }}>
                   Análise e Desenvolvimento de Sistemas na Fatec Jales
                 </Box>
-                , com término previsto para 2026, e acumulo cerca de 4 anos de experiência prática em desenvolvimento.
+                , com término previsto para 2026, e acumulo cerca de 4 anos de experiência teórica e diversas experiências em empresas, mentorias, e palestras, a maioria voltada para o desenvolvimento técnológico.
               </Typography>
               
               <Typography
@@ -101,9 +118,9 @@ export default function AboutPage() {
                   fontSize: { xs: '1rem', md: '1.125rem' },
                 }}
               >
-                Minha trajetória iniciou-se pelo curso técnico em Análise e Desenvolvimento de Sistemas,
-                onde consolidei fundamentos em programação e estruturas de dados. Desde então, tenho
-                expandido minhas capacidades em várias tecnologias e padrões arquiteturais modernos.
+                Tudo começou pelo curso técnico em Análise e Desenvolvimento de Sistemas - AMS na ETEC de Jales,
+                onde consolidei os principais fundamentos em programação e estruturas de dados. Desde então, tenho
+                expandido minhas capacidades em várias tecnologias.
               </Typography>
             </Box>
           </Box>
@@ -116,7 +133,7 @@ export default function AboutPage() {
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           <Box sx={{ mb: 10 }}>
-            <SectionTitle title="Experiência Profissional" align="left" />
+            <SectionTitle title="Minha Experiência Profissional" align="left" />
             
             <Box sx={{ position: 'relative', pl: { xs: 3, md: 4 } }}>
               {/* Timeline line */}
@@ -409,9 +426,9 @@ export default function AboutPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <Grid container spacing={3}>
+          <Grid container spacing={3} justifyContent="center">
             {stats.map((stat, index) => (
-              <Grid size={{ xs: 6, md: 3 }} key={index}>
+              <Grid item xs={6} md={3} key={index}>
                 <Card
                   elevation={2}
                   sx={{
@@ -444,6 +461,14 @@ export default function AboutPage() {
                 </Card>
               </Grid>
             ))}
+            {/* Counter below the stats, centered with same indentation */}
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                  {daysLeft} Dias até a conclusão da Fatec.
+                </Typography>
+              </Box>
+            </Grid>
           </Grid>
         </motion.div>
       </Container>
