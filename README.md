@@ -41,5 +41,3 @@ Este repositório é um portfólio pessoal construído com Next.js (App Router),
 - **Rodar em desenvolvimento**: `npm run dev` (servidor em `http://localhost:3000`)
 - **Build de produção**: `npm run build`
 - **Checar lint**: `npm run lint`
-
-Se quiser que eu atualize o README com mais detalhes (ex.: fluxo de deploy, estrutura de temas, ou exemplos de como adicionar um projeto), diga o que deseja incluir e eu atualizo.
