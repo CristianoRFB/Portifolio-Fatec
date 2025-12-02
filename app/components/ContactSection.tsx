@@ -8,6 +8,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 export function ContactSection() {
   const contactMethods = [
@@ -34,6 +35,18 @@ export function ContactSection() {
       label: 'LinkedIn',
       value: 'Cristiano Ronaldo Ferreira Bueno',
       href: siteConfig.linkedin,
+    },
+    {
+      icon: PictureAsPdfIcon,
+      label: 'Currículo (PT)',
+      value: 'Baixar CV (PT-BR)',
+      href: '/cv/cristianorfb-cv-pt.pdf',
+    },
+    {
+      icon: PictureAsPdfIcon,
+      label: 'Currículo (EN)',
+      value: 'Download CV (EN)',
+      href: '/cv/cristianorfb-cv-en.pdf',
     },
   ];
 

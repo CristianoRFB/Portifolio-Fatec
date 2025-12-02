@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
+import rehypeHighlight from 'rehype-highlight';
 import { useTheme } from '@mui/material/styles';
 
 interface ReadmeViewerProps {
@@ -123,18 +124,19 @@ export function ReadmeViewer({ content }: ReadmeViewerProps) {
               },
             },
             '& code': {
-              backgroundColor: theme.palette.mode === 'dark' ? '#161b22' : '#f6f8fa',
-              color: theme.palette.mode === 'dark' ? '#e6edf3' : '#24292e',
+              backgroundColor: theme.palette.mode === 'dark' ? '#1e293b' : '#f6f8fa',
+              color: theme.palette.mode === 'dark' ? '#f8fafc' : '#0f172a',
               padding: '0.2em 0.4em',
               marginRight: '0.2em',
               marginLeft: '0.2em',
               borderRadius: 3,
               fontSize: '0.85em',
               fontFamily: 'Menlo, Monaco, Courier New, monospace',
+              fontWeight: 500,
             },
             '& pre': {
-              backgroundColor: theme.palette.mode === 'dark' ? '#0d1117' : '#f6f8fa',
-              border: `1px solid ${theme.palette.mode === 'dark' ? '#30363d' : '#e1e4e8'}`,
+              backgroundColor: theme.palette.mode === 'dark' ? '#0f172a' : '#f6f8fa',
+              border: `1px solid ${theme.palette.mode === 'dark' ? '#475569' : '#e1e4e8'}`,
               borderRadius: 2,
               padding: '1em',
               overflowX: 'auto',
@@ -142,7 +144,7 @@ export function ReadmeViewer({ content }: ReadmeViewerProps) {
               marginBottom: '0.5em',
               '& code': {
                 backgroundColor: 'transparent',
-                color: theme.palette.mode === 'dark' ? '#e6edf3' : '#24292e',
+                color: theme.palette.mode === 'dark' ? '#f1f5f9' : '#0f172a',
                 padding: 0,
                 margin: 0,
                 borderRadius: 0,
@@ -195,16 +197,21 @@ export function ReadmeViewer({ content }: ReadmeViewerProps) {
         >
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw, rehypeSanitize]}
+            rehypePlugins={[rehypeRaw, rehypeSanitize, (rehypeHighlight as any)]}
             components={{
               a: ({ node, ...props }) => (
                 <a {...props} target="_blank" rel="noopener noreferrer" />
               ),
               code: ({ node, inline, className, children, ...props }: any) => {
+                const finalClass = className ?? props.className;
                 if (inline) {
-                  return <code {...props}>{children}</code>;
+                  return <code className={finalClass} {...props}>{children}</code>;
                 }
-                return <pre><code {...props}>{children}</code></pre>;
+                // For block code, do NOT render a <pre> here — react-markdown
+                // already wraps block code with <pre>. Returning only the
+                // <code> element avoids producing a <pre> inside a <p> or
+                // duplicating <pre> elements which causes hydration errors.
+                return <code className={finalClass} {...props}>{children}</code>;
               },
             }}
           >

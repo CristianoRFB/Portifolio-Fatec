@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { MuiProvider } from "./components/MuiThemeProvider";
+import EmotionCacheProvider from './components/EmotionCacheProvider';
 import { Navigation } from "./components/Navigation";
 import { Footer } from "./components/Footer";
 import { siteConfig } from "@/lib/site.config";
@@ -60,13 +61,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>
-          <MuiProvider>
-            <Navigation />
-            <main>{children}</main>
-            <Footer />
-          </MuiProvider>
-        </ThemeProvider>
+        <EmotionCacheProvider>
+          <ThemeProvider>
+            <MuiProvider>
+              <Navigation />
+              <main>{children}</main>
+              <Footer />
+            </MuiProvider>
+          </ThemeProvider>
+        </EmotionCacheProvider>
       </body>
     </html>
   );

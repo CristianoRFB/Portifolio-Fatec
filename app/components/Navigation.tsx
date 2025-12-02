@@ -33,6 +33,14 @@ export function Navigation() {
     setMounted(true);
   }, []);
 
+  // Prevent hydration mismatch by rendering a minimal placeholder on first render
+  // Client-only interactive parts will mount after hydration when `mounted` becomes true.
+  if (!mounted) {
+    // Use a plain HTML element to reserve header space on the server
+    // (avoids emotion/MUI style differences between server and client)
+    return <div style={{ minHeight: '64px' }} aria-hidden />;
+  }
+
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/#projects', label: 'Projetos pela Fatec' },
@@ -55,7 +63,6 @@ export function Navigation() {
       <AppBar
         position="fixed"
         elevation={0}
-        suppressHydrationWarning
         sx={{
           backgroundColor: 'background.paper',
           backdropFilter: 'blur(8px)',

@@ -3,6 +3,7 @@
 import { notFound } from 'next/navigation';
 import { MotionDiv } from '@/app/components/ClientMotion';
 import { ReadmeViewer } from '@/app/components/ReadmeViewer';
+import { RepositoryBrowser } from '@/app/components/RepositoryBrowser';
 import {
   Box,
   Container,
@@ -17,6 +18,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { getProjectBySlug, projects } from '@/lib/projects';
+import { getGitHubHeaders, readCache, writeCache } from '@/lib/github';
 
 export default async function ProjectPage({ params }: { params?: any }) {
   // Next 16 may provide `params` as a Promise in some render paths — unwrap safely
@@ -45,24 +47,77 @@ export default async function ProjectPage({ params }: { params?: any }) {
     const [, owner, repo] = githubUrl.pathname.split('/');
 
     if (owner && repo) {
-      // fetch README (raw)
-      const readmeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
-        headers: { Accept: 'application/vnd.github.v3.raw' },
-        next: { revalidate: 60 * 60 },
-      });
-      if (readmeRes.ok) {
-        readmeRaw = await readmeRes.text();
+      const readmeCacheName = `${owner}-${repo}-readme.md`;
+      const treeCacheName = `${owner}-${repo}-tree.json`;
+
+      // Try cache for README first
+      const cachedReadme = await readCache(readmeCacheName);
+      if (cachedReadme) {
+        readmeRaw = cachedReadme;
+      } else {
+        // fetch README (raw) with optional auth header
+        const readmeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+          headers: getGitHubHeaders('application/vnd.github.v3.raw'),
+          next: { revalidate: 60 * 60 },
+        });
+        if (readmeRes.ok) {
+          readmeRaw = await readmeRes.text();
+          // cache for later
+          if (readmeRaw) await writeCache(readmeCacheName, readmeRaw);
+        }
       }
 
-      // fetch repo metadata
+      // fetch repo metadata (try caching minimal repo info alongside tree)
       const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
-        headers: { Accept: 'application/vnd.github.v3+json' },
+        headers: getGitHubHeaders('application/vnd.github.v3+json'),
         next: { revalidate: 60 * 60 },
       });
       if (repoRes.ok) {
         const repoJson = await repoRes.json();
         repoLanguage = repoJson.language || null;
         repoTopics = repoJson.topics || [];
+        const defaultBranch = repoJson.default_branch || 'main';
+
+        // Try reading cached tree
+        let treeJsonText: string | null = await readCache(treeCacheName);
+        if (!treeJsonText) {
+          try {
+            const treeRes = await fetch(
+              `https://api.github.com/repos/${owner}/${repo}/git/trees/${defaultBranch}?recursive=1`,
+              { headers: getGitHubHeaders('application/vnd.github.v3+json'), next: { revalidate: 60 * 60 } }
+            );
+            if (treeRes.ok) {
+              treeJsonText = await treeRes.text();
+              // write cache
+              await writeCache(treeCacheName, treeJsonText);
+            }
+          } catch (e) {
+            console.warn('Failed to fetch repo tree for', project.github, e);
+          }
+        }
+
+        if (treeJsonText) {
+          try {
+            const treeJson = JSON.parse(treeJsonText);
+            const allFiles = Array.isArray(treeJson.tree) ? treeJson.tree : [];
+            const repoFiles = allFiles
+              .filter((t: any) => t.type === 'blob')
+              .slice(0, 500)
+              .map((t: any) => ({
+                path: t.path,
+                rawUrl: `https://raw.githubusercontent.com/${owner}/${repo}/${defaultBranch}/${t.path}`,
+                size: typeof t.size === 'number' ? t.size : null,
+                sha: t.sha,
+              }));
+            (project as any).__repoFiles = repoFiles;
+            (project as any).__repoDefaultBranch = defaultBranch;
+            (project as any).__repoOwner = owner;
+            (project as any).__repoName = repo;
+          } catch (e) {
+            // If parsing failed, ignore and continue
+            console.warn('Failed to parse tree JSON for', project.github, e);
+          }
+        }
       }
     }
   } catch (e) {
@@ -300,6 +355,27 @@ export default async function ProjectPage({ params }: { params?: any }) {
             </CardContent>
           </Card>
         </MotionDiv>
+
+        {(project as any).__repoFiles?.length > 0 && (
+          <MotionDiv
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+          >
+            <Box sx={{ mb: 8 }}>
+              <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', mb: 3 }}>
+                Conteúdo do Repositório
+              </Typography>
+              <RepositoryBrowser
+                files={(project as any).__repoFiles}
+                repoUrl={project.github}
+                owner={(project as any).__repoOwner}
+                repoName={(project as any).__repoName}
+                branch={(project as any).__repoDefaultBranch}
+              />
+            </Box>
+          </MotionDiv>
+        )}
 
         {/* Highlights */}
         {projectHighlights.length > 0 && (

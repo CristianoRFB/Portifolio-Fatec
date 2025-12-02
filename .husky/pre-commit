@@ -1,0 +1,5 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run lint on pre-commit. If you prefer lint-staged add it here.
+npm run lint
